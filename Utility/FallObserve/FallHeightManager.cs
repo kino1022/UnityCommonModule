@@ -29,12 +29,14 @@ namespace UnityCommonModule.Utility.FallObserve {
             var token = this.GetCancellationTokenOnDestroy();
             while (!token.IsCancellationRequested) {
                 try {
+                    //落下するまでの待機
                     await UniTask.WaitUntil(
                         () => m_isFallingHolder.GetIsFalling(), 
                         PlayerLoopTiming.Update, 
                         token
                         );
                     var previousHeight = this.transform.position.y;
+                    //落下終了までのループ処理
                     while (m_isFallingHolder.GetIsFalling()) {
                         await UniTask.DelayFrame(
                             1,
@@ -44,6 +46,7 @@ namespace UnityCommonModule.Utility.FallObserve {
                         m_Height += previousHeight - this.transform.position.y;
                         previousHeight = this.transform.position.y;
                     }
+                    //着地後の処理
                     OnGroundedUEvent.Invoke(m_Height);
                     m_Height = 0.0f;
                 }
