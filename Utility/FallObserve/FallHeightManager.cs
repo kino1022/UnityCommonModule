@@ -19,7 +19,7 @@ namespace UnityCommonModule.Utility.FallObserve {
         }
         
         //---------------------open methods-------------------------------
-        public float GetHeight() {
+        public float GetFallHeight() {
             return m_Height;
         }
         

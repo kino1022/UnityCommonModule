@@ -4,6 +4,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityCommonModule.Utility.FallObserve {
+    /// <summary>
+    /// キャラクターの落下状態を管理するMonobehaviour
+    /// </summary>
     public class FallingObserver : SerializedBehaviour {
         [SerializeField] protected bool m_isFalling;
         [SerializeField] protected int m_delayFrame = 5;
