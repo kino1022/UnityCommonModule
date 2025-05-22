@@ -1,6 +1,6 @@
 {
     "name": "Utility",
-    "rootNamespace": "Utility",
+    "rootNamespace": "Modules.Utility",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,6 +1,6 @@
 {
     "name": "Counter",
-    "rootNamespace": "Counter",
+    "rootNamespace": "Modules.Utility.Counter",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
