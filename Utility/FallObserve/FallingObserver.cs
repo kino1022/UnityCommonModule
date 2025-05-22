@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 
@@ -10,8 +11,7 @@ namespace UnityCommonModule.Utility.FallObserve {
         }
         
         protected async UniTask ObserveFalling() {
-            var token = this.GetCancellationTokenOnDestroy();
-            while (token)
+            var token = desto
         }
     }
 }
