@@ -1,13 +1,14 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using UnityCommonModule.FallObserve.Interface;
 using UnityEngine;
 
 namespace UnityCommonModule.Utility.FallObserve {
     /// <summary>
     /// キャラクターの落下状態を管理するMonobehaviour
     /// </summary>
-    public class FallingObserver : SerializedBehaviour {
+    public class FallingObserver : SerializedBehaviour , IIsFallingHolder{
         [SerializeField] protected bool m_isFalling;
         [SerializeField] protected int m_delayFrame = 5;
 

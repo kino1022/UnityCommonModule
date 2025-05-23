@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace UnityCommonModule.Utility.FallObserve {
-    public class FallHeightManager : SerializedBehaviour {
+    public class FallHeightManager : SerializedBehaviour , IFallHeightHolder {
         
         [SerializeField] protected float m_Height;
         
