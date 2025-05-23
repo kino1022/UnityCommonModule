@@ -1,8 +1,8 @@
-using Script.UnityCommonModule.CharacterMove.Interface;
+using UnityCommonModule.CharacterMove.Interface;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Script.UnityCommonModule.CharacterMove {
+namespace UnityCommonModule.CharacterMove {
     /// <summary>
     ///  CharacterController.Moveによる実移動をIMovementHolderによる移動量を参照して実際に移動させるコンポーネント
     /// </summary>
