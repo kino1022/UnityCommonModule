@@ -23,5 +23,7 @@ namespace UnityCommonModule.CharacterMove {
             } 
             return result;
         }
+        
+        
     }
 }

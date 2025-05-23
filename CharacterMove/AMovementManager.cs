@@ -59,6 +59,5 @@ namespace UnityCommonModule.CharacterMove {
             if (Mathf.Abs(movement.z) > Mathf.Abs(m_threshold.z)) movement.z = 0;
             return result;
         }
-        
     }
 }

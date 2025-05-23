@@ -16,7 +16,5 @@ namespace UnityCommonModule.CharacterMove {
         private void LateUpdate() {
             m_cc.Move(m_finnalyMovement.GetMovement() * Time.deltaTime);
         }
-        
-        
     }
 }
