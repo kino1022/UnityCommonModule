@@ -8,7 +8,7 @@ using UnityEngine.Playables;
 
 namespace UnityCommonModule.PlayableAnimation.ClipPlayer {
     [Serializable]
-    public class AnimationClipPlayer {
+    public class AnimationClipPlayer　: ScriptableObject {
         
         protected IGraphHolder m_graph;
 
@@ -27,6 +27,10 @@ namespace UnityCommonModule.PlayableAnimation.ClipPlayer {
         [Button("Stop Animation")]
         public void StopAnimation() {
             m_playable.Pause();
+        }
+        [Button("SetSpeed Animation")]
+        public void SetSpeed(float speed) {
+            m_playable.SetSpeed(speed);
         }
 
         //-----------------------SetUp methods------------------------------

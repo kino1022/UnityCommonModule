@@ -33,6 +33,8 @@ namespace UnityCommonModule.PlayableAnimation.Graph
         {
             m_graph.Stop();
         }
+        
+        public bool IsPlaying() => m_graph.IsPlaying();
 
         //------------------------interfaces methods-----------------------------------
 
