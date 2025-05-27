@@ -19,6 +19,7 @@ namespace UnityCommonModule.Correction {
         public Action RequireExecuteEvent { get; set; }
 
         private void Awake() {
+            CreateList();
             SetUpList();
         }
 
@@ -49,6 +50,14 @@ namespace UnityCommonModule.Correction {
             foreach (var correctionList in m_correctionLists) {
                 AddListenerRequireHandler(correctionList);
             }
+        }
+        
+        //------------------------Create methods-------------------------------
+
+        protected void CreateList() {
+            m_correctionLists = new List<ACorrectionList>();
+            m_correctionLists.Add(new FixedCorrectionList());
+            m_correctionLists.Add(new RatioCorrectionList());
         }
         
         //------------------------dispose methods-------------------------------
