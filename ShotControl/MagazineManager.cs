@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityCommonModule.ShotControl.Interface;
 using UnityEngine;
 
-namespace Script.UnityCommonModule.ShotControl {
+namespace UnityCommonModule.ShotControl {
     /// <summary>
     /// 残弾数を管理するコンポーネント
     /// </summary>
@@ -11,7 +11,6 @@ namespace Script.UnityCommonModule.ShotControl {
         [SerializeField] protected int m_maxValue;
 
         [SerializeField] protected int m_value;
-        
         
 
         public bool GetShotable() {
