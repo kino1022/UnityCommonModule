@@ -5,6 +5,7 @@ using UnityCommonModule.Correction.Interface;
 namespace UnityCommonModule.Correction {
     [Serializable]
     public class ACorrection {
+        
         public readonly CorrectionType Type;
         
         private float _value;
