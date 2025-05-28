@@ -6,6 +6,7 @@ namespace Modules.Utility.Counter {
     /// <summary>
     /// 秒数をカウントするカウンタ
     /// </summary>
+    [Serializable]
     public class SecondsCounter : ACounter<float> {
         
         CancellationToken token = CancellationToken.None;
@@ -17,11 +18,22 @@ namespace Modules.Utility.Counter {
             m_countInterval = countInterval;
         }
         
-        protected async UniTask counter() {
+        protected override async UniTask CountTask() {
+            
             while (!token.IsCancellationRequested) {
                 try {
-                    await UniTask.Delay(TimeSpan.FromSeconds(m_countInterval), cancellationToken: token);
+                    
+                    if (m_isProgress == false) {
+                        //　スパゲティ回避のために分けて書いた！知らなかったわけじゃあないやい！
+                        if (await WaitForReStart(token) == false) break;
+                    }
+                    
+                    token.ThrowIfCancellationRequested();
+                    
+                    await UniTask.Delay(TimeSpan.FromSeconds(m_countInterval),
+                        cancellationToken: token);
                     m_countInterval += m_countInterval;
+                    
                 }
                 catch (OperationCanceledException) {
                     break;

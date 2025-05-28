@@ -29,7 +29,7 @@ namespace UnityCommonModule.CharacterMove {
         [SerializeField] protected Vector3 m_threshold;
         
         //------------------Interface methods--------------------------
-        public Vector3 GetMovement() {
+        public virtual Vector3 GetMovement() {
             return m_movement;
         }
         
