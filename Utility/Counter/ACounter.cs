@@ -34,7 +34,9 @@ namespace Modules.Utility.Counter {
         public T GetCount() {
             return m_count;
         }
-
+        /// <summary>
+        /// 初期状態もしくは停止しているカウンタを始動するメソッド
+        /// </summary>
         public void StartProgress() {
             m_isProgress = true;
             if (!m_isRunning) {
@@ -42,7 +44,10 @@ namespace Modules.Utility.Counter {
                 m_isRunning = true;
             }
         }
-
+        
+        /// <summary>
+        /// カウンタを停止させるメソッド
+        /// </summary>
         public void StopProgress() {
             m_isProgress = false;
         }

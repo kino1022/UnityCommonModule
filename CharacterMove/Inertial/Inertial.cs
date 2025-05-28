@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Modules.Utility.Counter;
 using UnityCommonModule.CharacterMove.Interface;
 using UnityEngine;
 
@@ -26,10 +27,31 @@ namespace UnityCommonModule.CharacterMove.Inertial {
         /// </summary>
         protected CancellationToken m_token;
         
+        
+        protected SecondsInvoker m_inveker;
+
+        public Action<Inertial> DisposeEvent;
+
+        public Inertial(Vector3 direction, float force, float dumping, CancellationToken token) {
+            m_direction = direction;
+            m_force = force;
+            m_dumping = dumping;
+            m_token = token;
+
+            m_inveker = new SecondsInvoker(0.1f, DampingInertial, m_token);
+            m_inveker.StartProgress();
+        }
+        
         //----------------------API Methods-----------------------------
 
         public Vector3 GetMovement() {
             return CalculateMovement();
+        }
+        
+        //----------------------Dispose methods-------------------------
+
+        protected void DisposeInvoker() {
+            m_inveker.StopProgress();
         }
         
         //----------------------logical methods--------------------------
@@ -38,15 +60,13 @@ namespace UnityCommonModule.CharacterMove.Inertial {
             return m_direction * m_force;
         }
 
-        protected async UniTask DampingInertial() {
-            while (m_token.IsCancellationRequested) {
-                try {
-                    
-                }
-                catch (OperationCanceledException) {
-                    break;
-                }
+        protected void DampingInertial() {
+            m_force *= m_dumping;
+            if (m_force <= 0.001f) {
+                DisposeInvoker();
+                DisposeEvent?.Invoke(this);
             }
         }
+        
     }
 }
