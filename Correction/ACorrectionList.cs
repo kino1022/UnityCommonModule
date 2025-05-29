@@ -41,6 +41,14 @@ namespace UnityCommonModule.Correction {
             m_corrections.Add(correction);
             OnCorrectionValueChange();
         }
+
+        public void RemoveAll() {
+            m_corrections.Clear();
+        }
+
+        public void RemoveAt(ACorrection correction) {
+            m_corrections.Remove(correction);
+        }
         
         //--------------------------Listener methods----------------------------
 
