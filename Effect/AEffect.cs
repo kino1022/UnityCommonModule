@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Script.UnityCommonModule.Condition.Interface;
+using Sirenix.OdinInspector;
 using UnityCommonModule.Target.Interface;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace UnityCommonModule.Effect {
     /// <summary>
     /// スキルなどの効果を管理するScriptableObject
     /// </summary>
-    public class AEffect<T> : ScriptableObject {
+    public class AEffect<T> : SerializedScriptableObject {
         
         [SerializeField] protected T m_target;
         

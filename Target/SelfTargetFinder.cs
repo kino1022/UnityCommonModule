@@ -2,7 +2,7 @@ using System;
 using UnityCommonModule.Target.Interface;
 using UnityEngine;
 
-namespace Script.UnityCommonModule.Target {
+namespace UnityCommonModule.Target {
     /// <summary>
     /// 指定したゲームオブジェクトの指定したコンポーネントを取得するクラス
     /// </summary>
