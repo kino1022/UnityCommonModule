@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityCommonModule.Input.Button.Definition;
 using UnityCommonModule.Input.Button.Interface;
@@ -22,8 +23,13 @@ namespace UnityCommonModule.Input.Button {
                 SituationChangeEvent?.Invoke(_situation);
             }
         }
+
+        [SerializeField] protected float m_requireSeconds;
+        
+        [SerializeReference] protected HoldInputObserver m_observer;
         
         public Action<ButtonSituation> SituationChangeEvent { get; set; }
+        
         
         
         //-------------------API methods----------------------------
@@ -34,18 +40,58 @@ namespace UnityCommonModule.Input.Button {
 
         public void OnButton(InputAction.CallbackContext context) {
             if (context.performed) {
-                
+                OnPerformed();
             }
 
             if (context.canceled) {
-                
+                OnCanceled();
             }
+        }
+        
+        //-------------------Observer methods--------------------------
+
+        protected void SetUpObserver() {
+            m_observer = new HoldInputObserver(this, m_requireSeconds, this.destroyCancellationToken);
+        }
+
+        protected void DisposeObserver() {
+            
         }
         
         //-------------------Hook Point------------------------------
 
         protected virtual void OnSituationChanged() {
+            switch (m_situation) {
+                case ButtonSituation.None: OnNone(); break;
+                case ButtonSituation.Press : OnPress(); break;
+                case ButtonSituation.Hold : OnHold(); break;
+            }
+        }
+
+        protected virtual void OnPerformed() {
+            if (m_situation == ButtonSituation.None) {
+                m_situation = ButtonSituation.Press;
+            }
+        }
+
+        protected virtual void OnCanceled() {
+            if (m_situation == ButtonSituation.Hold) {
+                OnRelease();
+            }
+            m_situation = ButtonSituation.None;
+        }
+        
+        protected virtual void OnNone () {}
+
+        protected virtual void OnPress() {
             
         }
+        
+        protected virtual void OnHold() {}
+        
+        protected virtual void OnRelease() {}
+        
+        //---------------------logic methods----------------------------
+        
     }
 }
