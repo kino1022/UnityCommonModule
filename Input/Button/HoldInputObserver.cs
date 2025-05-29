@@ -21,7 +21,7 @@ namespace UnityCommonModule.Input.Button {
         /// <summary>
         /// 長押し判定の条件を満たした際に発火されるイベント
         /// </summary>
-        public Action PhaseHoldEvent;
+        public Action HoldCompleteEvent;
 
         protected CancellationToken token;
 
@@ -50,11 +50,44 @@ namespace UnityCommonModule.Input.Button {
         //----------------------hook point---------------------------------------
 
         protected void OnSituationChange(ButtonSituation situation) {
-            
+            if (situation == ButtonSituation.Press) {
+                ObserveHoldInput().Forget();
+            }
+        }
+
+        protected void OnCompleteHoldInput() {
+            HoldCompleteEvent?.Invoke();
         }
         
         //---------------------Logic methods-------------------------------------
 
-       
+        protected async UniTask ObserveHoldInput() {
+            try {
+                var result = await UniTask.WhenAny(
+                    UniTask.Delay(TimeSpan.FromSeconds(m_requireSeconds)),
+                    ObserveReleaseInput()
+                    );
+                if (result == 1) {
+                    OnCompleteHoldInput();
+                }
+            }
+            catch (OperationCanceledException) {
+                
+            }
+        }
+
+        protected async UniTask ObserveReleaseInput() {
+            var tcs = new UniTaskCompletionSource();
+            m_handler.SituationChangeEvent += OnSituationChange;
+            
+            await UniTask.WhenAny(tcs.Task);
+
+            void OnTrigger(ButtonSituation input) {
+                if (input != ButtonSituation.Hold) {
+                    tcs.TrySetResult();
+                    m_handler.SituationChangeEvent -= OnSituationChange;
+                }
+            }
+        }
     }
 }

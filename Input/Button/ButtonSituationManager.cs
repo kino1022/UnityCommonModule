@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using UnityCommonModule.Input.Button.Definition;
 using UnityCommonModule.Input.Button.Interface;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace UnityCommonModule.Input.Button {
@@ -27,10 +28,12 @@ namespace UnityCommonModule.Input.Button {
         [SerializeField] protected float m_requireSeconds;
         
         [SerializeReference] protected HoldInputObserver m_observer;
+
+        [SerializeField] protected HoldDurationCounter m_counter;
         
         public Action<ButtonSituation> SituationChangeEvent { get; set; }
         
-        
+        public UnityEvent<float> ReleaseHoldUEvent { get; set; }
         
         //-------------------API methods----------------------------
 
@@ -52,10 +55,22 @@ namespace UnityCommonModule.Input.Button {
 
         protected void SetUpObserver() {
             m_observer = new HoldInputObserver(this, m_requireSeconds, this.destroyCancellationToken);
+            m_observer.HoldCompleteEvent += OnHoldCompleted;
         }
 
         protected void DisposeObserver() {
-            
+            m_observer.HoldCompleteEvent -= OnHoldCompleted;
+        }
+        
+        //-------------------Counter methods-----------------------
+
+        protected void SetUpCounter() {
+            m_counter = new HoldDurationCounter(this, this.destroyCancellationToken);
+            m_counter.ReleaseEvent += OnReleaseEvent;
+        }
+
+        protected void DisposeCounter() {
+            m_counter.ReleaseEvent -= OnReleaseEvent;
         }
         
         //-------------------Hook Point------------------------------
@@ -83,13 +98,24 @@ namespace UnityCommonModule.Input.Button {
         
         protected virtual void OnNone () {}
 
-        protected virtual void OnPress() {
-            
-        }
+        protected virtual void OnPress() { }
         
         protected virtual void OnHold() {}
         
         protected virtual void OnRelease() {}
+
+        protected virtual void OnHoldCompleted() {
+            m_situation = ButtonSituation.Hold;
+            DisposeObserver();
+            SetUpObserver();
+        }
+
+
+        protected void OnReleaseEvent(float duration) {
+            ReleaseHoldUEvent?.Invoke(duration);
+            DisposeObserver();
+            SetUpObserver();
+        }
         
         //---------------------logic methods----------------------------
         
