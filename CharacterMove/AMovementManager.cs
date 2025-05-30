@@ -19,6 +19,7 @@ namespace UnityCommonModule.CharacterMove {
                 OnPostChangeMovement();
             }
         }
+        
         /// <summary>
         /// 閾値に従って運動量を丸めるかどうか
         /// </summary>
