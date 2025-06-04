@@ -1,4 +1,4 @@
-namespace UnityCommonModule.Script.UnityCommonModule.Status {
+namespace UnityCommonModule.Status {
     
     public class RawStatusValue<T> : AStatusValueBase<T> {
 

@@ -1,98 +1,90 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityCommonModule.Correction.Definition;
-using UnityCommonModule.Correction.Interface;
 using UnityEngine;
 
 namespace UnityCommonModule.Correction {
+    /// <summary>
+    /// 補正値の分類ごとに補正値を管理するクラス
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [Serializable]
-    public abstract class ACorrectionList : ICorrectionExecutor , IRequireExecuteHandler {
+    public abstract class ACorrectionList<C> where C : ACorrection {
         
-        public readonly CorrectionType CorrectionType;
+        [OdinSerialize,LabelText("管理する補正値の分類")] 
+        protected CorrectionType m_type;
         
-        protected List<ACorrection> m_corrections = new List<ACorrection>();
+        [OdinSerialize,SerializeField,LabelText("管理している補正値")] 
+        protected List<C> m_corrections = new List<C>();
 
-        private float _totalValue;
+        #region API Methods
 
-        protected float m_totalValue {
-            get { return _totalValue; }
-            set {
-                OnPreCorrectionValueChange();
-                _totalValue = value;
-                OnPostCorrectionValueChange();
-            }
-        }
-        
-        public Action RequireExecuteEvent { get; set; }
-        
-        //--------------------------API Methods---------------------------------
-        
         public abstract float ExecuteCorrection(float value);
 
-        public virtual float GetTotalValue() {
-            return m_totalValue;
-        }
+        public virtual void AddCorrection(C correction) {
 
-        public void AddCorrection(ACorrection correction) {
-            if (correction.Type != this.CorrectionType) {
-                Debug.Log("補正値分類が異なるクラスがリストに追加されそうになったじゃないか！お前のコードミスだ！");
+            if (!GetAddable(correction)) {
                 return;
             }
+            
             m_corrections.Add(correction);
-            OnCorrectionValueChange();
+            AddListenerCorrection(correction);
         }
 
-        public void RemoveAll() {
-            m_corrections.Clear();
-        }
-
-        public void RemoveAt(ACorrection correction) {
+        public virtual void RemoveCorrection(C correction) {
             m_corrections.Remove(correction);
+            RemoveListenerCorrection(correction);
+        }
+
+        public CorrectionType GetCorrectionType() {
+            return m_type;
+        }
+
+        public ACorrection GetAnyCorrection(C correction) {
+            return m_corrections.Find(x => x == correction);
+        }
+
+        #endregion
+        
+        #region Listener
+
+        protected virtual void AddListenerCorrection(C correction) {
+            correction.DisposeEvent += OnCorrectionDispose;
+        }
+
+        protected virtual void RemoveListenerCorrection(C correction) {
+            correction.DisposeEvent -= OnCorrectionDispose;
         }
         
-        //--------------------------Listener methods----------------------------
-
-        protected void AddListenerValueChange(ACorrection correction) {
-            correction.CorrectionValueChangeEvent += OnCorrectionValueChange;
-        }
-
-        protected void RemoveListenerValueChange(ACorrection correction) {
-            correction.CorrectionValueChangeEvent -= OnCorrectionValueChange;
-        }
-
-        protected void AddListenerDisposeCorrection(ACorrection correction) {
-            correction.CorrectionDisposeEvnet += OnDisposeCorrection;
-        }
-
-        protected void RemoveListenerDisposeCorrection(ACorrection correction) {
-            correction.CorrectionDisposeEvnet -= OnDisposeCorrection;
-        }
         
-        //--------------------------Hook Point----------------------------------
-
-        protected virtual void OnDisposeCorrection(ACorrection correction) {
-            m_corrections.Remove(correction);
-            OnCorrectionValueChange();
-        }
-
-        protected virtual void OnCorrectionValueChange() {
-            m_totalValue = GetTotalValue();
-        }
-
-        protected virtual void OnPreCorrectionValueChange() { }
-
-        protected virtual void OnPostCorrectionValueChange() {
-            RequireExecuteEvent?.Invoke();
-        }
+        #endregion
         
-        //--------------------------Logical Methods-----------------------------
+        
+        #region HookPoint
 
-        protected virtual float CalculateTotalValue() {
-            var result = 0.0f;
-            foreach (var correction in m_corrections) {
-                result += correction.GetCorrectionValue();
+        protected virtual void OnCorrectionDispose(ACorrection correction) {
+            if (correction is C cor) {
+                RemoveCorrection(cor);
             }
-            return result;
         }
+        
+        #endregion
+        
+        #region Logical
+
+        protected virtual bool GetAddable(ACorrection correction) {
+            
+            if (correction.GetCorrectionType() != m_type) {
+                return false;
+            }
+            
+            return true;
+        }
+
+        protected abstract float CalculateTotalValue();
+
+        #endregion
     }
 }

@@ -2,7 +2,7 @@ using System;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace UnityCommonModule.Script.UnityCommonModule.Status {
+namespace UnityCommonModule.Status {
     [Serializable]
     public class AStatusValueBase<T> {
         

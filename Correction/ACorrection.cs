@@ -1,72 +1,93 @@
 using System;
+using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityCommonModule.Correction.Definition;
 using UnityCommonModule.Correction.Interface;
 
 namespace UnityCommonModule.Correction {
     [Serializable]
     public class ACorrection {
+
+        [OdinSerialize] protected CorrectionType m_type;
         
-        public readonly CorrectionType Type;
-        
-        private float _value;
-        
+        [OdinSerialize] private float _value;
+
         protected float m_value {
-            get { return _value; }
+            get {return _value;}
             set {
-                value = OnPreValueChanged(value);
+                value = OnPreValueChange(value);
                 _value = value;
-                OnPostValueChanged();
+                OnPostValueChange();
             }
         }
 
-        protected IDisposeHandler m_dispose;
+        public Action<ACorrection> DisposeEvent;
         
-        public Action<ACorrection> CorrectionDisposeEvnet { get; set; }
+        protected List<ICorrectionDisposeHandler> m_handlers = new List<ICorrectionDisposeHandler>();
 
-        public Action CorrectionValueChangeEvent { get; set; }
-
-        public ACorrection(CorrectionType type, float value, IDisposeHandler disposeHandler) {
-            
-        }
-        
-        //---------------------------API Methods------------------------
-
-        public void ChangeCorrectionValue(float value) {
+        public ACorrection(float value,CorrectionType type) {
             m_value = value;
+            m_type = type;
         }
 
-        public float GetCorrectionValue() {
+        public ACorrection(float value,CorrectionType type, List<ICorrectionDisposeHandler> handlers) {
+            m_value = value;
+            m_type = type;
+            m_handlers = handlers;
+            AddListenerHandler();
+        }
+
+        #region API Methods
+
+        public float GetValue() {
             return m_value;
         }
 
-        public void DisposeHandle(IDisposeHandler disposeHandler) {
-            disposeHandler.DisposeEvnet += OnDisposeCorrection;
-        }
-        
-        //------------------------------購読処理--------------------------
-        
-        public void AddListenerDisposeHandler(IDisposeHandler handler) {
-            handler.DisposeEvnet += OnDisposeCorrection;
+        public CorrectionType GetCorrectionType() {
+            return m_type;
         }
 
-        public void RemoveListenerDisposeHandler(IDisposeHandler handler) {
-            handler.DisposeEvnet -= OnDisposeCorrection;
-        }
+        #endregion
         
-        //-------------------------------hook point methods---------------
 
-        protected virtual float OnPreValueChanged(float value) {
+        #region Listener
+
+        protected void AddListenerHandler() {
+            if (m_handlers == null) {
+                return;
+            }
+
+            foreach (var handler in m_handlers) {
+                handler.DisposeEvent += OnDisposeEvent;
+            }
+        }
+
+        protected void RemoveListenerHandler() {
+            if (m_handlers == null) {
+                return;
+            }
+
+            foreach (var handler in m_handlers) {
+                handler.DisposeEvent -= OnDisposeEvent;
+            }
+        }
+
+        #endregion
+        
+        
+        #region Hook Point
+
+        protected virtual float OnPreValueChange(float value) {
             return value;
         }
-
-        protected virtual void OnPostValueChanged() { }
         
-        /// <summary>
-        /// 補正値が無効化される際に呼び出される処理
-        /// </summary>
-        public void OnDisposeCorrection() {
-            m_value = 0.0f;
-            CorrectionDisposeEvnet?.Invoke(this);
+        protected virtual void OnPostValueChange () { }
+
+        protected virtual void OnDisposeEvent() {
+            RemoveListenerHandler();
+            DisposeEvent?.Invoke(this);
         }
+        
+        #endregion
     }
 }
