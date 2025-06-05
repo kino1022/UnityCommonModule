@@ -23,10 +23,9 @@ namespace UnityCommonModule.Status.Correctable {
         protected IAlwaysCorrectionManager m_correction = new AlwaysCorrectionManager();
 
         private void Awake() {
-            m_rawStatus = new RawStatusValue<T>(m_entryValue);
-            m_corrected = new CorrectedStatusValue<T>();
-            ApplyCorrection();
+            SetUpStatusValue();
             SetUpCorrectionManager();
+            ApplyCorrection();
         }
 
         private void OnDestroy() {
@@ -60,12 +59,23 @@ namespace UnityCommonModule.Status.Correctable {
         /// </summary>
         protected abstract void ApplyCorrection();
 
+        protected override void SetUpStatusValue() {
+            base.SetUpStatusValue();
+            m_corrected = new CorrectedStatusValue<T>();
+        }
+
         #endregion
         
         #region Correction
 
         protected virtual void SetUpCorrectionManager() {
             AddListenerRequire();
+
+            if (m_initialData.GetCorrections() == null) return;
+            
+            foreach (var correction in m_initialData.GetCorrections()) {
+                m_correction.AddCorrection(correction);
+            }
         }
 
         protected virtual void AddListenerRequire() {

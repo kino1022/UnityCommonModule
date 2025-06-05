@@ -13,6 +13,17 @@ public class StatusInitializeData<T> : SerializedScriptableObject {
     
     [LabelText("初期補正値")] 
     protected List<AlwaysCorrection> m_initialCorrections = new List<AlwaysCorrection>();
-    
+
+    #region API
+
+    public T GetInitialValue() {
+        return m_entryValue;
+    }
+
+    public List<AlwaysCorrection> GetCorrections() {
+        return m_initialCorrections;
+    }
+
+    #endregion
     
 }

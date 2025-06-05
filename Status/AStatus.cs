@@ -1,6 +1,7 @@
 using System.Numerics;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityCommonModule.Status.Data;
 using UnityCommonModule.Status.Strategy;
 using UnityEngine;
 
@@ -9,14 +10,14 @@ namespace UnityCommonModule.Status {
 
     public abstract class AStatus<T> : SerializedMonoBehaviour {
         
-        [SerializeField,LabelText("初期値")]
-        protected T m_entryValue;
+        [SerializeField,LabelText("初期化用データ")]
+        protected StatusInitializeData<T> m_initialData;
 
         [SerializeField, OdinSerialize, LabelText("ステータスの値")]
         protected RawStatusValue<T> m_rawStatus;
 
         private void Awake() {
-            m_rawStatus = new RawStatusValue<T>(m_entryValue);
+            SetUpStatusValue();
         }
 
         #region API Methods
@@ -40,6 +41,14 @@ namespace UnityCommonModule.Status {
         protected virtual void OnPreValueChange() { }
 
         protected virtual void OnPostValueChanged() { }
+
+        #endregion
+
+        #region SetUp
+
+        protected virtual void SetUpStatusValue() {
+            m_rawStatus.SetValue(m_initialData.GetInitialValue());
+        }
 
         #endregion
     }

@@ -1,6 +1,7 @@
 namespace UnityCommonModule.Status;
 
 public class IntStatus : AStatus<int> {
+    
     #region API
 
     public override void Increase(int value) {
@@ -16,4 +17,5 @@ public class IntStatus : AStatus<int> {
     }
 
     #endregion
+    
 }
