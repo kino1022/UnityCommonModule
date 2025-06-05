@@ -7,6 +7,8 @@ namespace UnityCommonModule.Correction.Always {
     public class AlwaysCorrectionList : ACorrectionList<AlwaysCorrection> , IRequireReExecuteHandler {
         
         public Action RequireReExecuteEvent { get; set; }
+        
+        public AlwaysCorrectionList(CorrectionType type) : base(type) {}
 
         #region API
 

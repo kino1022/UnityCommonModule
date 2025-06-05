@@ -7,10 +7,17 @@ using UnityEngine;
 
 namespace UnityCommonModule.Status {
 
-    public abstract class AStatus<T> : SerializedBehaviour {
+    public abstract class AStatus<T> : SerializedMonoBehaviour {
+        
+        [SerializeField,LabelText("初期値")]
+        protected T m_entryValue;
 
         [SerializeField, OdinSerialize, LabelText("ステータスの値")]
         protected RawStatusValue<T> m_rawStatus;
+
+        private void Awake() {
+            m_rawStatus = new RawStatusValue<T>(m_entryValue);
+        }
 
         #region API Methods
 

@@ -1,6 +1,10 @@
+using UnityCommonModule.Correction.Definition;
+
 namespace UnityCommonModule.Correction.Instant {
     
-    public class InstantCorrectionList : ACorrectionList<InstantCorrection>  {
+    public class InstantCorrectionList : ACorrectionList<InstantCorrection> {
+
+        public InstantCorrectionList(CorrectionType type) : base(type) {}
         
         #region API Methods
 

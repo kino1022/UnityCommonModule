@@ -2,6 +2,7 @@ using System;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityCommonModule.Correction;
+using UnityCommonModule.Correction.Always;
 using UnityCommonModule.Correction.Always.Interface;
 using UnityCommonModule.Correction.Interface;
 using UnityCommonModule.Status.Interface;
@@ -18,9 +19,13 @@ namespace UnityCommonModule.Status.Correctable {
         
         [SerializeField, OdinSerialize, LabelText("補正後の値")] protected CorrectedStatusValue<T> m_corrected;
 
-        [SerializeField, OdinSerialize, LabelText("補正管理")] protected IAlwaysCorrectionManager m_correction;
+        [SerializeField, OdinSerialize, LabelText("補正管理")]
+        protected IAlwaysCorrectionManager m_correction = new AlwaysCorrectionManager();
 
         private void Awake() {
+            m_rawStatus = new RawStatusValue<T>(m_entryValue);
+            m_corrected = new CorrectedStatusValue<T>();
+            ApplyCorrection();
             SetUpCorrectionManager();
         }
 

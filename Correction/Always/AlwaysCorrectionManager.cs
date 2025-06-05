@@ -2,7 +2,8 @@ using System;
 using UnityCommonModule.Correction.Always.Interface;
 
 namespace UnityCommonModule.Correction.Always {
-    public class AlwaysCorrectionManager : ACorrectionManager<AlwaysCorrection> , IRequireReExecuteHandler {
+    [Serializable]
+    public class AlwaysCorrectionManager : ACorrectionManager<AlwaysCorrection>, IAlwaysCorrectionManager , IRequireReExecuteHandler {
         
         public Action RequireReExecuteEvent { get; set; }
 

@@ -10,8 +10,8 @@ namespace UnityCommonModule.Correction {
     [Serializable]
     public class ACorrectionManager<C> : ICorrectionManager where C : ACorrection {
 
-        [SerializeField, OdinSerialize] 
-        protected List<ACorrectionList<C>> m_list;
+        [SerializeField, OdinSerialize, LabelText("補正値管理リスト")]
+        protected List<ACorrectionList<C>> m_list = new List<ACorrectionList<C>>();
 
         [SerializeField, OdinSerialize,LabelText("計算の際の計算順")] 
         protected List<CorrectionType> m_priority = new List<CorrectionType>() { CorrectionType.Fixed, CorrectionType.Ratio };

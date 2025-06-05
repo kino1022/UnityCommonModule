@@ -22,6 +22,10 @@ namespace UnityCommonModule.Correction {
         [OdinSerialize,SerializeField,LabelText("管理している補正値")] 
         protected List<C> m_corrections = new List<C>();
 
+        public ACorrectionList(CorrectionType type) {
+            m_type = type;
+        }
+
         #region API Methods
 
         public virtual float ExecuteCorrection(float value) {
