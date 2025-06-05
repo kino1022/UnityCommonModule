@@ -1,21 +1,22 @@
-namespace UnityCommonModule.Status;
+namespace UnityCommonModule.Status {
 
-public class IntStatus : AStatus<int> {
-    
-    #region API
+    public class IntStatus : AStatus<int> {
 
-    public override void Increase(int value) {
-        OnPreValueChange();
-        m_rawStatus.SetValue(GetValue() + value);
-        OnPostValueChanged();
+        #region API
+
+        public override void Increase(int value) {
+            OnPreValueChange();
+            m_rawStatus.SetValue(GetValue() + value);
+            OnPostValueChanged();
+        }
+
+        public override void Decrease(int value) {
+            OnPreValueChange();
+            m_rawStatus.SetValue(GetValue() - value);
+            OnPostValueChanged();
+        }
+
+        #endregion
+
     }
-
-    public override void Decrease(int value) {
-        OnPreValueChange();
-        m_rawStatus.SetValue(GetValue() - value);
-        OnPostValueChanged();
-    }
-
-    #endregion
-    
 }
