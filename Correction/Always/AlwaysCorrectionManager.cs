@@ -2,7 +2,7 @@ using System;
 using UnityCommonModule.Correction.Always.Interface;
 
 namespace UnityCommonModule.Correction.Always {
-    public class AAlwaysCorrectionManager : ACorrectionManager<AAlwaysCorrection> , IRequireReExecuteHandler {
+    public class AlwaysCorrectionManager : ACorrectionManager<AlwaysCorrection> , IRequireReExecuteHandler {
         
         public Action RequireReExecuteEvent { get; set; }
 

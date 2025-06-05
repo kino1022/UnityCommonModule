@@ -4,11 +4,11 @@ using UnityCommonModule.Correction.Strategy.Interface;
 
 namespace UnityCommonModule.Correction.Strategy {
     
-    public class FixedCalculateStrategy : ICalculateStrategy {
+    public class FixedCalculateStrategy<C> : ICalculateStrategy<C> where C : ACorrection {
         
-        protected List<ACorrection>  m_corrections = new List<ACorrection>();
+        protected List<C>  m_corrections = new List<C>();
 
-        public FixedCalculateStrategy(ref List<ACorrection> corrections) {
+        public FixedCalculateStrategy(ref List<C> corrections) {
             this.m_corrections = corrections;
         }
 

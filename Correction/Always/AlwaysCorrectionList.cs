@@ -4,7 +4,7 @@ using UnityCommonModule.Correction.Definition;
 
 namespace UnityCommonModule.Correction.Always {
     [Serializable]
-    public class AAlwaysCorrectionList : ACorrectionList<AAlwaysCorrection> , IRequireReExecuteHandler {
+    public class AlwaysCorrectionList : ACorrectionList<AlwaysCorrection> , IRequireReExecuteHandler {
         
         public Action RequireReExecuteEvent { get; set; }
 
@@ -14,12 +14,12 @@ namespace UnityCommonModule.Correction.Always {
             return value;
         }
 
-        public override void AddCorrection(AAlwaysCorrection correction) {
+        public override void AddCorrection(AlwaysCorrection correction) {
             base.AddCorrection(correction);
             RequireReExecuteEvent?.Invoke();
         }
 
-        public override void RemoveCorrection(AAlwaysCorrection correction) {
+        public override void RemoveCorrection(AlwaysCorrection correction) {
             base.RemoveCorrection(correction);
             RequireReExecuteEvent?.Invoke();
         }
@@ -28,12 +28,12 @@ namespace UnityCommonModule.Correction.Always {
 
         #region Listener
 
-        protected override void AddListenerCorrection(AAlwaysCorrection correction) {
+        protected override void AddListenerCorrection(AlwaysCorrection correction) {
             base.AddListenerCorrection(correction);
             correction.RequireReExecuteEvent += RequireReExecuteEvent;
         }
 
-        protected override void RemoveListenerCorrection(AAlwaysCorrection correction) {
+        protected override void RemoveListenerCorrection(AlwaysCorrection correction) {
             base.RemoveListenerCorrection(correction);
             correction.RequireReExecuteEvent -= RequireReExecuteEvent;
         }

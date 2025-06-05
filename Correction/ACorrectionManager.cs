@@ -19,8 +19,10 @@ namespace UnityCommonModule.Correction {
         
         #region API Methods
 
-        public float ExecuteCorrection(float value) {
-            return CalculateCorrection(value);
+        public virtual float ExecuteCorrection(float value) {
+            var result = CalculateCorrection(value);
+            OnPreExecuteCorrection();
+            return result;
         }
 
         public void AddCorrection(ACorrection correction) {
@@ -77,6 +79,12 @@ namespace UnityCommonModule.Correction {
             
             return result;
         }
+        
+        #endregion
+        
+        #region Hook Point
+        
+        protected virtual void OnPreExecuteCorrection() {}
         
         #endregion
     }

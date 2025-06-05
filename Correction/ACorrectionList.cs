@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityCommonModule.Correction.Definition;
+using UnityCommonModule.Correction.Strategy;
+using UnityCommonModule.Correction.Strategy.Interface;
+using UnityCommonModule.Status.Interface;
 using UnityEngine;
 
 namespace UnityCommonModule.Correction {
@@ -21,7 +24,12 @@ namespace UnityCommonModule.Correction {
 
         #region API Methods
 
-        public abstract float ExecuteCorrection(float value);
+        public virtual float ExecuteCorrection(float value) {
+            
+            ICalculateStrategy<C> str = GetCalculateStrategy();
+
+            return str.ApplyCorrection(value);
+        }
 
         public virtual void AddCorrection(C correction) {
 
@@ -83,7 +91,21 @@ namespace UnityCommonModule.Correction {
             return true;
         }
 
-        protected abstract float CalculateTotalValue();
+        protected virtual float CalculateTotalValue() {
+            var str = GetCalculateStrategy();
+            return str.CalculateTotalValue();
+        }
+
+        protected virtual ICalculateStrategy<C> GetCalculateStrategy() {
+            if (m_type == CorrectionType.Fixed) {
+                return new FixedCalculateStrategy<C>(ref m_corrections);
+            }
+            else if (m_type == CorrectionType.Ratio) {
+                return new RatioCalculateStrategy<C>(ref m_corrections);
+            }
+            
+            return null;
+        }
 
         #endregion
     }

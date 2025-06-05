@@ -8,16 +8,16 @@ namespace UnityCommonModule.Correction.Always {
     /// <summary>
     /// 常に最新の値を取得する必要のある補正値に使用する補正値クラス
     /// </summary>
-    public class AAlwaysCorrection : ACorrection , IRequireReExecuteHandler  {
+    public class AlwaysCorrection : ACorrection , IRequireReExecuteHandler  {
         
         public Action RequireReExecuteEvent { get; set; }
         
-        public AAlwaysCorrection(float value, CorrectionType type) 
+        public AlwaysCorrection(float value, CorrectionType type) 
             : base(value, type) {
             
         }
 
-        public AAlwaysCorrection(float value, CorrectionType type, List<ICorrectionDisposeHandler> handlers)
+        public AlwaysCorrection(float value, CorrectionType type, List<ICorrectionDisposeHandler> handlers)
             : base(value, type, handlers) {
             
         }

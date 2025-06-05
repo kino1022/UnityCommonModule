@@ -14,7 +14,7 @@ namespace UnityCommonModule.Status.Correctable {
     /// </summary>
     /// <typeparam name="T">管理する値の変数型</typeparam>
     /// <typeparam name="C">補正値マネージャのデータ型</typeparam>
-    public class ACorrectableStatus<T> : AStatus<T>, ICorrectable  {
+    public abstract class ACorrectableStatus<T> : AStatus<T>, ICorrectable  {
         
         [SerializeField, OdinSerialize, LabelText("補正後の値")] protected CorrectedStatusValue<T> m_corrected;
 
@@ -34,34 +34,27 @@ namespace UnityCommonModule.Status.Correctable {
             return m_corrected.GetValue();
         }
 
-        public override void Set(T value) {
-            OnPreValueChange();
-            m_rawStatus.SetValue(value);
+        public virtual void ExecuteCorrection() {
             ApplyCorrection();
-            OnPostValueChanged();
         }
 
-        public override void Increase(T value) { }
+        public void AddCorrection(ACorrection correction) {
+            m_correction.AddCorrection(correction);
+        }
 
-        public override void Decrease(T value) { }
-
-        public void ExecuteCorrection() { }
-        
-        public void AddCorrection(ACorrection correction) { }
-        
-        public void RemoveCorrection(ACorrection target) { }
+        public void RemoveCorrection(ACorrection target) {
+            m_correction.RemoveCorrection(target);
+        }
 
         #endregion
         
         #region Logic Methods
-        
+
         /// <summary>
         /// 元の値に対して補正値を適用したものをCorrectedValueに対して代入する
         /// </summary>
-        protected void ApplyCorrection() {
-            
-        }
-        
+        protected abstract void ApplyCorrection();
+
         #endregion
         
         #region Correction
@@ -80,6 +73,14 @@ namespace UnityCommonModule.Status.Correctable {
         
         #endregion
         
+        #region Hook Point
+
+        protected override void OnPostValueChanged() {
+            base.OnPostValueChanged();
+            ApplyCorrection();
+        }
+
+        #endregion
 
     }
 }
