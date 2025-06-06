@@ -5,10 +5,20 @@ namespace UnityCommonModule.InputControl.Button.Interface {
     /// ボタンの状態を管理するクラスに対して与えるインターフェース
     /// </summary>
     public interface ISituationHolder {
+        
         /// <summary>
         /// 現在のボタンの状態を取得する
         /// </summary>
         /// <returns></returns>
         public ButtonSituation GetCurrentSituation();
+        
+        /// <summary>
+        /// 一つ前のボタンの状態を取得する
+        /// </summary>
+        /// <returns></returns>
+        public ButtonSituation GetPreviousSituation();
+        
+        public void SetSituation(ButtonSituation situation);
+        
     }
 }

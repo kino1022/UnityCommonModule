@@ -1,6 +1,6 @@
 namespace UnityCommonModule.InputControl.Button.Modules {
-    public abstract class AOnPressHook : IHookPoint {
+    public abstract class AOnPressHook : AHook {
+        public AOnPressHook(AButtonBase button) : base(button) { }
         
-        public abstract void OnHook();
     }
 }
