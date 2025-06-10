@@ -8,6 +8,7 @@ namespace UnityCommonModule.Correction.Always {
     /// <summary>
     /// 常に最新の値を取得する必要のある補正値に使用する補正値クラス
     /// </summary>
+    [Serializable]
     public class AlwaysCorrection : ACorrection , IRequireReExecuteHandler  {
         
         public Action RequireReExecuteEvent { get; set; }
