@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityCommonModule.Correction.Definition;
 using UnityCommonModule.Correction.Interface;
@@ -6,6 +7,7 @@ namespace UnityCommonModule.Correction.Instant {
     /// <summary>
     /// 使用回数や効果時間に制限のある補正値に対して使用する補正値クラス
     /// </summary>
+    [Serializable]
     public class InstantCorrection : ACorrection {
 
         public InstantCorrection(float value, CorrectionType type) : base(value, type) {
