@@ -66,6 +66,10 @@ namespace UnityCommonModule.Correction {
                 
                 result = list.Calculate(result);
             }
+
+            foreach (var list in m_list) {
+                list.OnExecuted();
+            }
             
             return result;
         }
