@@ -69,5 +69,11 @@ namespace UnityCommonModule.Correction {
         protected virtual void OnCorrectionDispose(ICorrection correction) {
             Remove(correction);
         }
+
+        public void OnExecuted() {
+            foreach (var correction in m_corrections) {
+                correction.OnExecuted();
+            }
+        }
     }
 }

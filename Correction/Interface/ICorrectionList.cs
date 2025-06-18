@@ -13,5 +13,10 @@ namespace UnityCommonModule.Correction.Interface {
         public void Remove(ICorrection correction);
 
         public float Calculate(float value);
+        
+        /// <summary>
+        /// 補正値が適用された際に呼び出されるメソッド
+        /// </summary>
+        public void OnExecuted();
     }
 }

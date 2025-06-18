@@ -17,6 +17,11 @@ namespace UnityCommonModule.Correction.Interface {
         /// 補正値が有効かどうか
         /// </summary>
         public bool IsActive { get; }
-        
+
+        /// <summary>
+        /// 補正値が使用された際に呼び出されるメソッド
+        /// </summary>
+        public void OnExecuted();
+
     }
 }
