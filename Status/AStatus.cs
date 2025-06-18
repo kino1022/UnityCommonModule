@@ -1,55 +1,66 @@
-using System.Numerics;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityCommonModule.Status.Data;
-using UnityCommonModule.Status.Strategy;
+using UnityCommonModule.Status.Interface;
+using UnityCommonModule.Status.Module;
 using UnityEngine;
 
-
 namespace UnityCommonModule.Status {
+    
+    public abstract class AStatus<T,C> : SerializedMonoBehaviour , IStatus<T> where C : ICalculator<T> , new() {
 
-    public abstract class AStatus<T> : SerializedMonoBehaviour {
+        [SerializeField, OdinSerialize, LabelText("初期化用データ")]
+        protected StatusInitializeData<T> m_data;
         
-        [SerializeField,LabelText("初期化用データ")]
-        protected StatusInitializeData<T> m_initialData;
+        protected RawValueModule<T> m_rawValue;
 
-        [SerializeField, OdinSerialize, LabelText("ステータスの値")]
-        protected RawStatusValue<T> m_rawStatus;
+        protected C m_calculator = new C();
+        
+        public IValueHolder<T> Raw => m_rawValue;
 
         private void Awake() {
-            SetUpStatusValue();
+            if (m_data == null) {
+                Debug.LogError("ステータス初期化用のデータが存在しませんでした");
+                return;
+            }
+            
+            Initialize();
         }
 
-        #region API Methods
-
-        public virtual T GetValue() { return m_rawStatus.GetValue(); }
+        public virtual T Get() {
+            return m_rawValue.Get();
+        }
 
         public virtual void Set(T value) {
-            OnPreValueChange();
-            m_rawStatus.SetValue(value);
-            OnPostValueChanged();
+            m_rawValue.Set(value);
+            OnPostValueChange();
         }
 
-        public abstract void Increase(T value);
-
-        public abstract void Decrease(T value);
-
-        #endregion
-
-        #region Hook Point
-
-        protected virtual void OnPreValueChange() { }
-
-        protected virtual void OnPostValueChanged() { }
-
-        #endregion
-
-        #region SetUp
-
-        protected virtual void SetUpStatusValue() {
-            m_rawStatus.SetValue(m_initialData.GetInitialValue());
+        public void Increase(T amount) {
+            amount = OnPreValueChange(amount);
+            m_rawValue.Set(m_calculator.Add(m_rawValue.Get(), amount));
+            OnPostValueChange();
         }
 
-        #endregion
+        public void Decrease(T amount) {
+            amount = OnPreValueChange(amount);
+            m_rawValue.Set(m_calculator.Subtract(m_rawValue.Get(), amount));
+            OnPostValueChange();
+        }
+
+        protected void Initialize() {
+            OnInitialize();
+        }
+
+        protected virtual void OnInitialize() {
+            m_rawValue = new RawValueModule<T>(m_data.InitialValue);
+        }
+
+        protected virtual T OnPreValueChange(T nextValue) {
+            return nextValue;
+        }
+        
+        protected virtual void OnPostValueChange () {}
+        
     }
 }
