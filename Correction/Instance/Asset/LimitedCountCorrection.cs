@@ -2,7 +2,7 @@ using System;
 using UnityCommonModule.Correction.Interface;
 using UnityEngine;
 
-namespace UnityCommonModule.Correction.Instance {
+namespace UnityCommonModule.Correction.Instance.Asset {
     /// <summary>
     /// 基本的な回数制限付きの補正値
     /// </summary>
