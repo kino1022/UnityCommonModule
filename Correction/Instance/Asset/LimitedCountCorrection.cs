@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityCommonModule.Correction.Interface;
 using UnityEngine;
 
@@ -6,8 +7,10 @@ namespace UnityCommonModule.Correction.Instance.Asset {
     /// <summary>
     /// 基本的な回数制限付きの補正値
     /// </summary>
+    [Serializable]
     public class LimitedCountCorrection : ACorrection {
 
+        [SerializeField, LabelText("適用回数")]
         private int _count = Mathf.Min(0, 0);
 
         protected int m_count {
@@ -17,16 +20,7 @@ namespace UnityCommonModule.Correction.Instance.Asset {
                 OnCountChanged();
             }
         }
-
-        public LimitedCountCorrection(int count, ICorrectionType type, float value) : base(type, value) {
-            
-            if (count <= 0) {
-                Debug.LogError("使用回数が0回以下で初期化されました");
-                return;
-            }
-            
-            m_count = count;
-        }
+        
 
         public override void OnExecuted() {
             m_count--;

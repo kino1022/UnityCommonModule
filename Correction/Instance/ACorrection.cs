@@ -23,11 +23,7 @@ namespace UnityCommonModule.Correction.Instance {
         public float Value => m_value;
         
         public bool IsActive => m_isActive;
-
-        protected ACorrection(ICorrectionType type, float value) {
-            m_type = type;
-            m_value = value;
-        }
+        
 
         public virtual void Dispose() {
             m_value = 0.0f;
