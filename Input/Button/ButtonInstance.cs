@@ -6,13 +6,16 @@ using UnityEngine.InputSystem;
 
 namespace UnityCommonModule.Input.Button {
     
-    public class ButtonInstance : IDisposable , IButtonInstance {
+    public class ButtonInstance : IDisposable , IButtonInstance{
 
-        protected InputAction m_input;
+        protected InputActionMap m_input;
+
+        protected InputAction m_action;
 
         protected IButtonSituation m_situation;
         
         protected ButtonData m_data;
+        
         
         public ButtonData Data => m_data;
         
@@ -20,10 +23,8 @@ namespace UnityCommonModule.Input.Button {
             m_data = data;
             m_input = m_data.Input;
             m_situation = new NoneSituation(this);
-        }
-
-        public void Awake() {
-            m_input.Enable();
+            
+            
         }
 
         public void Dispose() {
@@ -39,6 +40,7 @@ namespace UnityCommonModule.Input.Button {
             if (context.canceled) {
                 m_situation.OnRelease();
             }
+            
         }
 
         public void SetSituation(IButtonSituation situation) {

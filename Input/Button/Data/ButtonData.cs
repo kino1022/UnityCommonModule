@@ -8,7 +8,7 @@ namespace UnityCommonModule.Input.Button.Data {
     public class ButtonData : SerializedScriptableObject {
         
         [SerializeField, LabelText("入力内容")] 
-        public InputAction Input;
+        public InputActionMap Input;
 
         [SerializeField, LabelText("")] 
         public UnityAction<InputContext> Action;
