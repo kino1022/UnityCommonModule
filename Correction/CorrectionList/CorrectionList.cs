@@ -7,20 +7,24 @@ using UnityCommonModule.Correction.Interface;
 using UnityEngine;
 using R3;
 using UnityCommonModule.Correction.Module;
+using Sirenix.Serialization;
+using Sirenix.OdinInspector;
 
 namespace UnityCommonModule.Correction {
-    public class CorrectionList : ICorrectionList , IReExecuteHandler {
-        
+    [Serializable]
+    public class CorrectionList : ICorrectionList, IReExecuteHandler {
+        [OdinSerialize, LabelText("管理できる補正値の型")]
         protected ICorrectionType m_type;
-        
-        public ICorrectionType Type => m_type;
 
+        public ICorrectionType Type => m_type;
+        [OdinSerialize, LabelText("管理している補正値のリスト")]
         protected ObservableList<ICorrection> m_corrections = new ObservableList<ICorrection>();
-        
+
         public IReadOnlyObservableList<ICorrection> List => m_corrections;
 
-        protected CorrectionObserveModule m_observer;
         
+        protected CorrectionObserveModule m_observer;
+
         public Action ReExecuteEvent { get; set; }
 
         public CorrectionList(ICorrectionType type) {
@@ -30,24 +34,24 @@ namespace UnityCommonModule.Correction {
         }
 
         public void Add(ICorrection correction) {
-            
-            if (m_type.GetType() != correction.Type.GetType()) {
+
+            if(m_type.GetType() != correction.Type.GetType()) {
                 Debug.LogError("計算方式の異なる補正値が追加されました、追加処理を中断します");
                 return;
             }
-            
+
             m_corrections.Add(correction);
             ReExecuteEvent?.Invoke();
         }
 
         public void Remove(ICorrection correction) {
             var target = m_corrections.Where(x => x == correction).FirstOrDefault();
-            
-            if (target == null) {
+
+            if(target == null) {
                 Debug.LogError("除外対象に指定された補正値のインスタンスがリストに存在しませんでした");
                 return;
             }
-            
+
             m_corrections.Remove(correction);
             ReExecuteEvent?.Invoke();
         }
@@ -71,7 +75,7 @@ namespace UnityCommonModule.Correction {
         }
 
         public void OnExecuted() {
-            foreach (var correction in m_corrections) {
+            foreach(var correction in m_corrections) {
                 correction.OnExecuted();
             }
         }
