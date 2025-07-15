@@ -6,16 +6,16 @@ using UnityCommonModule.Status.Module;
 using UnityEngine;
 
 namespace UnityCommonModule.Status {
-    
+
     public abstract class AStatus<T,C> : SerializedMonoBehaviour , IStatus<T> where C : ICalculator<T> , new() {
 
         [SerializeField, OdinSerialize, LabelText("初期化用データ")]
         protected StatusInitializeData<T> m_data;
-        
+
         protected RawValueModule<T> m_rawValue;
 
         protected C m_calculator = new C();
-        
+
         public IValueHolder<T> Raw => m_rawValue;
 
         private void Awake() {
@@ -23,13 +23,12 @@ namespace UnityCommonModule.Status {
                 Debug.LogError("ステータス初期化用のデータが存在しませんでした");
                 return;
             }
-            
+
             Initialize();
         }
 
-        public virtual T Get() {
-            return m_rawValue.Get();
-        }
+        [OdinSerialize, LabelText("現在の値")]
+        public virtual T Get => m_rawValue.Get();
 
         public virtual void Set(T value) {
             m_rawValue.Set(value);
@@ -59,8 +58,8 @@ namespace UnityCommonModule.Status {
         protected virtual T OnPreValueChange(T nextValue) {
             return nextValue;
         }
-        
+
         protected virtual void OnPostValueChange () {}
-        
+
     }
 }

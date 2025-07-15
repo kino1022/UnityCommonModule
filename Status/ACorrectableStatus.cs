@@ -1,5 +1,6 @@
 using R3;
-using UnityCommonModule.Correction;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityCommonModule.Correction;
 using UnityCommonModule.Correction.Interface;
 using UnityCommonModule.Status.Interface;
@@ -8,14 +9,17 @@ using UnityEngine;
 
 namespace UnityCommonModule.Status {
     public abstract class ACorrectableStatus<T,C> : AStatus<T,C>, ICorrectableStatus<T> where C : ICalculator<T> ,new(){
-        
+
         protected CorrectedValueModule<T> m_corrected;
-        
+
         public IValueHolder<T> Corrected => m_corrected;
 
         protected CorrectionManager m_correction = new CorrectionManager();
-        
+
         public ICorrector Correction => m_correction;
+
+        [OdinSerialize, LabelText("現在の値")]
+        public override T Get => m_corrected.Get();
 
         /// <summary>
         /// 補正値を適用するメソッド
@@ -28,7 +32,7 @@ namespace UnityCommonModule.Status {
             base.OnInitialize();
             m_corrected = new CorrectedValueModule<T>(m_data.InitialValue);
             RegisterObserveRawValue();
-            
+
             m_correction.Handler.ReExecuteEvent += ApplyCorrection;
         }
 
@@ -43,6 +47,6 @@ namespace UnityCommonModule.Status {
                 OnPostRawValueChange();
             });
         }
-        
+
     }
 }

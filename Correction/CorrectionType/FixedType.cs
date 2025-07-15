@@ -6,7 +6,7 @@ namespace UnityCommonModule.Correction.CorrectionType {
     /// 固定値での補正値を示すクラス
     /// </summary>
     public class FixedType : ICorrectionType {
-        
+
         public float Calculate(float value,List<ICorrection> corrections) {
             return value + CalculateTotalValue(corrections);
         }
@@ -18,6 +18,6 @@ namespace UnityCommonModule.Correction.CorrectionType {
             }
             return result;
         }
-        
+
     }
 }
